@@ -1,0 +1,107 @@
+# For this project, I downloaded Spotify data from Kaggle.
+# Then I created a table to insert Spotify data into.
+# Finally, I performed analytics on the data using SQL. 
+
+#Creating the table: 
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+)
+
+#Then I inserted the Spotify Data .csv into the table.
+
+#Next, I explored the data using the following SQL. 
+
+#Artists who collaborated with other artists and the song titles.
+SELECT artist_name
+,track_name
+FROM BIT_DB.Spotifydata
+WHERE track_name like '%feat%';
+
+#Number of songs Dua Lipa has in the database.
+SELECT COUNT (id)
+FROM BIT_DB.Spotifydata
+WHERE artist_name = 'Dua Lipa';
+
+
+#Artists with more than 2 songs in the database.
+SELECT distinct artist_name
+,COUNT (id)
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+HAVING count(id)>=3
+ORDER BY COUNT(id) desc;
+
+
+#List of Olivia Rodrigo's songs in the database 
+SELECT track_name
+FROM BIT_DB.Spotifydata
+WHERE artist_name = 'Olivia Rodrigo';
+
+
+#Average danceability, liveness, energy and loudness of Doja Cat's songs.
+SELECT Track_name
+,ROUND(AVG (danceability),2)AS AVG_Danceability
+,ROUND (AVG(liveness),2) as AVG_liveness
+,ROUND (AVG(energy),2) as AVG_energy
+,ROUND (AVG(loudness),2)as AVG_loudness
+FROM BIT_DB.Spotifydata
+WHERE artist_name= 'Doja Cat'
+GROUP BY track_name;
+
+#What is the fastest song in the database
+SELECT track_name
+,artist_name
+,MAX(tempo)
+FROM BIT_DB.Spotifydata
+
+#Assigned artists "Super Star",'Famous' and 'Average' based on the average popularity of their song/s. 
+SELECT distinct artist_name
+, AVG (popularity),
+CASE WHEN popularity >=90 THEN 'Super Star'
+WHEN popularity >=80 THEN 'Famous'
+ELSE 'Average'
+END AS 'Status'
+FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+HAVING AVG (popularity)
+Order BY artist_name asc;
+
+#Top 10 songs based on popularity
+SELECT track_name, artist_name, popularity
+FROM BIT_DB.spotifydata
+ORDER BY popularity desc
+LIMIT 10;
+
+
+#Order of songs in the database from saddest to happiest based on valence.
+SELECT track_name, artist_name , valence
+FROM BIT_DB.Spotifydata
+ORDER BY valence asc;
+
+
+#Which song is the longest.
+SELECT track_name
+,artist_name
+,MAX(duration_ms)
+FROM BIT_DB.Spotifydata
+WHERE duration_ms;
+
+
+
