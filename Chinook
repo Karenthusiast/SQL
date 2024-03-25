@@ -1,3 +1,70 @@
+--What is the most sold album in the USA?
+SELECT a.title AS album_title,
+       ar.name AS artist_name,
+       COUNT(*) AS total_sold
+FROM chinook.tracks t
+JOIN chinook.albums a ON t.albumId = a.albumId
+JOIN chinook.artists ar ON a.artistId = ar.artistId
+JOIN chinook.invoice_items ii ON t.trackId = ii.trackId
+JOIN chinook.invoices i ON ii.invoiceId = i.invoiceId
+WHERE i.billingCountry = 'USA'
+GROUP BY a.albumId
+ORDER BY total_sold DESC
+LIMIT 1;
+
+
+
+--Order the countries that sold the most albums to the least.
+SELECT billingCountry
+,COUNT (InvoiceId)as total_albums_sold
+FROM chinook.invoices
+GROUP BY BillingCountry
+ORDER BY total_albums_sold desc;
+
+
+--Order the most popular genre based on the total albums sold.
+SELECT g.name
+, COUNT (DISTINCT t.albumId) as total_sold
+FROM chinook.genres g
+JOIN chinook.tracks t
+ON g.GenreId = t.GenreId
+JOIN chinook.invoice_items ii
+ON t.trackId= ii.trackId
+Join chinook.invoices i
+ON ii.invoiceid=i.invoiceid
+GROUP BY g.name,g.genreid
+ORDER BY total_sold desc;
+
+--How many tracks are there in each genre?
+SELECT g.name AS "Genre"
+, COUNT (t.trackid)as "TotalTracks"
+FROM chinook.genres g
+JOIN chinook.tracks t
+ON g.genreid = t.genreid
+GROUP by g.name
+ORDER BY g.name;
+
+--What are the top 5 selling tracks? (use a Common Table Expression / CTE)
+WITH TrackSales_CTE AS (
+SELECT t.trackId
+,t.name
+,SUM (ii.Quantity)AS totalSold
+FROM tracks t
+JOIN invoice_items ii
+ON t.Trackid = ii.trackId
+JOIN invoices i
+ON i.invoiceId= ii.invoiceId
+GROUP BY t.trackid
+)
+
+SELECT TrackId
+,Name
+,TotalSold
+from TrackSales_cte
+ORDER BY TotalSold desc
+LIMIT 5;
+
+
 SELECT FirstName, 
 LastName
 ,CustomerId
@@ -111,68 +178,3 @@ GROUP BY e.FirstName
 ORDER BY (round(sum(I.Total), 2))  DESC LIMIT 1;
 
 
---What is the most sold album in the USA?
-SELECT a.title AS album_title,
-       ar.name AS artist_name,
-       COUNT(*) AS total_sold
-FROM chinook.tracks t
-JOIN chinook.albums a ON t.albumId = a.albumId
-JOIN chinook.artists ar ON a.artistId = ar.artistId
-JOIN chinook.invoice_items ii ON t.trackId = ii.trackId
-JOIN chinook.invoices i ON ii.invoiceId = i.invoiceId
-WHERE i.billingCountry = 'USA'
-GROUP BY a.albumId
-ORDER BY total_sold DESC
-LIMIT 1;
-
-
-
---Order the countries that sold the most albums to the least.
-SELECT billingCountry
-,COUNT (InvoiceId)as total_albums_sold
-FROM chinook.invoices
-GROUP BY BillingCountry
-ORDER BY total_albums_sold desc;
-
-
---Order the most popular genre based on the total albums sold.
-SELECT g.name
-, COUNT (DISTINCT t.albumId) as total_sold
-FROM chinook.genres g
-JOIN chinook.tracks t
-ON g.GenreId = t.GenreId
-JOIN chinook.invoice_items ii
-ON t.trackId= ii.trackId
-Join chinook.invoices i
-ON ii.invoiceid=i.invoiceid
-GROUP BY g.name,g.genreid
-ORDER BY total_sold desc;
-
---How many tracks are there in each genre?
-SELECT g.name AS "Genre"
-, COUNT (t.trackid)as "TotalTracks"
-FROM chinook.genres g
-JOIN chinook.tracks t
-ON g.genreid = t.genreid
-GROUP by g.name
-ORDER BY g.name;
-
---What are the top 5 selling tracks? (use a Common Table Expression / CTE)
-WITH TrackSales_CTE AS (
-SELECT t.trackId
-,t.name
-,SUM (ii.Quantity)AS totalSold
-FROM tracks t
-JOIN invoice_items ii
-ON t.Trackid = ii.trackId
-JOIN invoices i
-ON i.invoiceId= ii.invoiceId
-GROUP BY t.trackid
-)
-
-SELECT TrackId
-,Name
-,TotalSold
-from TrackSales_cte
-ORDER BY TotalSold desc
-LIMIT 5;
