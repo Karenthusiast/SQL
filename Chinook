@@ -56,7 +56,6 @@ JOIN invoices i
 ON i.invoiceId= ii.invoiceId
 GROUP BY t.trackid
 )
-
 SELECT TrackId
 ,Name
 ,TotalSold
@@ -64,7 +63,7 @@ from TrackSales_cte
 ORDER BY TotalSold desc
 LIMIT 5;
 
-
+--Show Customers (their full names, customer ID, and country) who are not in the US. 
 SELECT FirstName, 
 LastName
 ,CustomerId
