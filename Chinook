@@ -71,6 +71,7 @@ LastName
 FROM chinook.customers
 WHERE Country <> 'USA';
 
+--Show only the Customers from Brazil.
 SELECT * 
 FROM chinook.customers
 WHERE Country = 'Brazil';
