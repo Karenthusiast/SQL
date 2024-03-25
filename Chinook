@@ -153,7 +153,7 @@ ON t.AlbumId = albums.AlbumId
 Left Join chinook.artists
 ON albums.ArtistId = artists.ArtistId;
 
-
+--Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
 SELECT m.Name AS 'Media Type'
 ,g.name AS 'Genre'
 ,a.title AS 'Album Title'
@@ -166,7 +166,7 @@ ON m.MediaTypeId=t.MediaTypeId
 Join chinook.genres g
 ON g.GenreId = t.GenreId;
 
-
+--Show the total sales made by each sales agent.
 SELECT ROUND (SUM(i.total),2) as 'Total Sale'
 ,e.FirstName
 ,e.LastName
@@ -175,6 +175,9 @@ JOIN chinook.customers c on c.SupportRepId = e.EmployeeId
 JOIN chinook.invoices i ON i.CustomerId = c.CustomerId
 WHERE e.Title = 'Sales Support Agent'
 GROUP BY e.FirstName;
+
+
+--Which sales agent made the most dollars in sales in 2009?
 
 SELECT e.FirstName
 ,e.LastName
