@@ -86,12 +86,15 @@ LEFT JOIN chinook.customers customers
 ON invoices.CustomerId= customers.CustomerId
 WHERE BillingCountry = 'Brazil';
 
+
+--Show the Employees who are Sales Agents.
 SELECT Firstname
 ,LastName
 ,Title
 FROM chinook.employees
 WHERE Title= 'Sales Support Agent';
 
+--Find a unique/distinct list of billing countries from the Invoice table.
 SELECT DISTINCT BillingCountry
 FROM chinook.invoices;
 
