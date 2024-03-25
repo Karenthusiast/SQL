@@ -1,3 +1,13 @@
+# Final SQL Project
+<img src="https://cdn.fs.teachablecdn.com/ADNupMnWyR7kCWRvm76Laz/https://www.filepicker.io/api/file/sF9aIU7TqOLNWWSSNrOp">
+
+<br>
+
+## Analysis
+
+#In this SQL code, I'm querying a database that's holding Nexflix data to answer questions about the data. 
+
+
 --What is the most sold album in the USA?
 SELECT a.title AS album_title,
        ar.name AS artist_name,
