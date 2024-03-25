@@ -1,0 +1,178 @@
+SELECT FirstName, 
+LastName
+,CustomerId
+,Country
+FROM chinook.customers
+WHERE Country <> 'USA';
+
+SELECT * 
+FROM chinook.customers
+WHERE Country = 'Brazil';
+
+SELECT customers.FirstName
+,customers.LastName
+,invoices.InvoiceId
+,invoices.BillingCountry
+FROM chinook.invoices invoices
+LEFT JOIN chinook.customers customers
+ON invoices.CustomerId= customers.CustomerId
+WHERE BillingCountry = 'Brazil';
+
+SELECT Firstname
+,LastName
+,Title
+FROM chinook.employees
+WHERE Title= 'Sales Support Agent';
+
+SELECT DISTINCT BillingCountry
+FROM chinook.invoices;
+
+
+
+SELECT emp.FirstName
+,emp.LastName
+,inv.InvoiceId
+FROM chinook.employees emp
+JOIN chinook.customers cust on cust.SupportRepId = emp.EmployeeId
+JOIN chinook.invoices inv ON inv.CustomerId = cust.CustomerId;
+
+SELECT 
+emp.FirstName
+,emp.LastName
+,cust.Country
+,cust.FirstName
+,cust.LastName
+,inv.Total
+FROM chinook.employees emp
+JOIN chinook.customers cust on cust.SupportRepId = emp.EmployeeId
+JOIN chinook.invoices inv ON inv.CustomerId = cust.CustomerId;
+
+SELECT COUNT(*)
+FROM chinook.invoices
+WHERE InvoiceDate like '%2009%';
+
+
+
+SELECT SUM(total)
+FROM chinook.invoices
+WHERE InvoiceDate like '%2009%';
+
+
+SELECT tracks.Name
+,InvItem.InvoiceLineId
+FROM chinook.tracks tracks
+JOIN chinook.invoice_items InvItem
+ON tracks.TrackId = InvItem.TrackId;
+
+
+SELECT t.Name AS Track_Name
+,artists.Name AS Artist_Name
+,i.InvoiceLineId
+FROM chinook.invoice_items i
+LEFT JOIN chinook.tracks t
+ON t.TrackId = i.TrackId
+INNER JOIN chinook.albums
+ON t.AlbumId = albums.AlbumId
+Left Join chinook.artists
+ON albums.ArtistId = artists.ArtistId;
+
+
+SELECT m.Name AS 'Media Type'
+,g.name AS 'Genre'
+,a.title AS 'Album Title'
+,t.name AS 'Track Name'
+FROM chinook.tracks t
+JOIN chinook.Albums a
+ON a.AlbumId= t.AlbumId
+JOIN chinook.Media_Types m
+ON m.MediaTypeId=t.MediaTypeId
+Join chinook.genres g
+ON g.GenreId = t.GenreId;
+
+
+SELECT ROUND (SUM(i.total),2) as 'Total Sale'
+,e.FirstName
+,e.LastName
+FROM chinook.employees e
+JOIN chinook.customers c on c.SupportRepId = e.EmployeeId
+JOIN chinook.invoices i ON i.CustomerId = c.CustomerId
+WHERE e.Title = 'Sales Support Agent'
+GROUP BY e.FirstName;
+
+SELECT e.FirstName
+,e.LastName
+FROM chinook.employees e
+JOIN chinook.customers c on c.SupportRepId = e.EmployeeId
+JOIN chinook.invoices i ON i.CustomerId = c.CustomerId
+JOIN chinook.invoice_items it On it.invoiceid=i.invoiceid
+WHERE e.Title = 'Sales Support Agent' 
+AND I.InvoiceDate LIKE '2009%' 
+GROUP BY e.FirstName
+ORDER BY (round(sum(I.Total), 2))  DESC LIMIT 1;
+
+
+--What is the most sold album in the USA?
+SELECT a.title AS album_title,
+       ar.name AS artist_name,
+       COUNT(*) AS total_sold
+FROM chinook.tracks t
+JOIN chinook.albums a ON t.albumId = a.albumId
+JOIN chinook.artists ar ON a.artistId = ar.artistId
+JOIN chinook.invoice_items ii ON t.trackId = ii.trackId
+JOIN chinook.invoices i ON ii.invoiceId = i.invoiceId
+WHERE i.billingCountry = 'USA'
+GROUP BY a.albumId
+ORDER BY total_sold DESC
+LIMIT 1;
+
+
+
+--Order the countries that sold the most albums to the least.
+SELECT billingCountry
+,COUNT (InvoiceId)as total_albums_sold
+FROM chinook.invoices
+GROUP BY BillingCountry
+ORDER BY total_albums_sold desc;
+
+
+--Order the most popular genre based on the total albums sold.
+SELECT g.name
+, COUNT (DISTINCT t.albumId) as total_sold
+FROM chinook.genres g
+JOIN chinook.tracks t
+ON g.GenreId = t.GenreId
+JOIN chinook.invoice_items ii
+ON t.trackId= ii.trackId
+Join chinook.invoices i
+ON ii.invoiceid=i.invoiceid
+GROUP BY g.name,g.genreid
+ORDER BY total_sold desc;
+
+--How many tracks are there in each genre?
+SELECT g.name AS "Genre"
+, COUNT (t.trackid)as "TotalTracks"
+FROM chinook.genres g
+JOIN chinook.tracks t
+ON g.genreid = t.genreid
+GROUP by g.name
+ORDER BY g.name;
+
+--What are the top 5 selling tracks? (use a Common Table Expression / CTE)
+WITH TrackSales_CTE AS (
+SELECT t.trackId
+,t.name
+,SUM (ii.Quantity)AS totalSold
+FROM tracks t
+JOIN invoice_items ii
+ON t.Trackid = ii.trackId
+JOIN invoices i
+ON i.invoiceId= ii.invoiceId
+GROUP BY t.trackid
+)
+
+SELECT TrackId
+,Name
+,TotalSold
+from TrackSales_cte
+ORDER BY TotalSold desc
+LIMIT 5;
