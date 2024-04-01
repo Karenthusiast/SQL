@@ -19,11 +19,10 @@ This repository showcases my SQL projects. Feel free to explore and reach out wi
 | Project Name | Description | Link |
 |:------------:|-------------|:----:|
 | Superstore                 | For this project, I used SQL to query the Superstore database to get information about items sold at the store and their prices.  | [View](https://github.com/Karenthusiast/SQL/blob/main/Superstore%20database) |
-| Fortune 500                |This analysis utilized the following Fortune 500 dataset:| [View](https://github.com/Karenthusiast/SQL/blob/main/Fortune%20500%20Analysis) |
+| Fortune 500                |This analysis utilized the following Fortune 500 dataset.| [View](https://github.com/Karenthusiast/SQL/blob/main/Fortune%20500%20Analysis) |
 | Netflix                    | The project was written using the PostgreSQL dialect and utilized data from the following two Netflix datasets. | [View](https://github.com/Karenthusiast/SQL/blob/main/NetFlix%20Analytics%20%20(SQL%20Fiddle)) |
 | Spotify                    | For this project, I downloaded Spotify data from Kaggle. Then I created a table to insert Spotify data into.Finally, I performed analytics on the data using SQL. | [View](https://github.com/Karenthusiast/SQL/blob/main/Spotify%20Database) |
-| Customer & Order Analytics | In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. 
- | [View](https://github.com/Karenthusiast/SQL/blob/main/Customer%20%26%20Order%20Analytics) |
+| Customer & Order Analytics | In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. | [View](https://github.com/Karenthusiast/SQL/blob/main/Customer%20%26%20Order%20Analytics) |
 | Final Project | Analyzes a music store database to deliver insights on financial performance, music genre preferences, top-selling tracks, and customer spending behaviors.  | [View](https://github.com/Karenthusiast/SQL/blob/main/Chinook) |
 
 <br>
